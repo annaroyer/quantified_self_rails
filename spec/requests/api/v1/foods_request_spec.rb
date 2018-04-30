@@ -7,13 +7,13 @@ describe 'Foods API' do
 
       get '/api/v1/foods'
 
-      foods = JSON.parse(response.body)
+      food = JSON.parse(response.body, symbolize_names: true)
 
       expect(response).to be_success
-      expect(foods.count).to eq(5)
-      expect(foods.first[:id]).to eq(1)
-      expect(foods.first[:name]).to be_a(String)
-      expect(foods.first[:calories]).to be_an(Integer)
+      expect(food.count).to eq(5)
+      expect(food.first[:id]).to eq(1)
+      expect(food.first[:name]).to be_a(String)
+      expect(food.first[:calories]).to be_an(Integer)
     end
   end
 end
