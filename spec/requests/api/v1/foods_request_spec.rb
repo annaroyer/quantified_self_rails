@@ -52,5 +52,15 @@ describe 'Foods API' do
       expect(banana[:calories]).to eq(150)
       expect(Food.count).to eq(3)
     end
+
+    it 'returns a 404 if food is not created successfully' do
+      post '/api/v1/foods', params: { "food": {"calories": "150"} }
+
+      expect(response.status).to eq(404)
+
+      post '/api/v1/foods', params: { "food": {"name": "banana"} }
+
+      expect(response.status).to eq(404)
+    end
   end
 end
