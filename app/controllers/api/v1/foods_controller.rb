@@ -15,6 +15,11 @@ class Api::V1::FoodsController < ApplicationController
     render json: Food.update(params[:id], food_params)
   end
 
+  def destroy
+    food = Food.find(params[:id])
+    render json: food.destroy, status: 204
+  end
+
   private
 
     def food_params
