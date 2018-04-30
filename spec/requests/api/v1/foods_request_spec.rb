@@ -25,9 +25,16 @@ describe 'Foods API' do
 
       food = JSON.parse(response.body, symbolize_names: true)
 
+      expect(response).to be_success
       expect(food[:id]).to eq(banana.id)
       expect(food[:name]).to eq(banana.name)
       expect(food[:calories]).to eq(banana.calories)
+    end
+
+    it 'returns a 404 if the food is not found' do
+      get '/api/v1/foods/1'
+
+      expect(response.status).to eq(404)
     end
   end
 end
