@@ -16,4 +16,18 @@ describe 'Foods API' do
       expect(food.first[:calories]).to be_an(Integer)
     end
   end
+
+  context '/api/v1/foods/:id' do
+    it 'returns the food object with the specified id' do
+      banana = Food.create!(name: 'Banana', calories: 150)
+
+      get '/api/v1/foods/1'
+
+      food = JSON.parse(response.body, symbolize_names: true)
+
+      expect(food[:id]).to eq(banana.id)
+      expect(food[:name]).to eq(banana.name)
+      expect(food[:calories]).to eq(banana.calories)
+    end
+  end
 end
