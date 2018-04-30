@@ -10,6 +10,7 @@ gem 'rails', '~> 5.1.6'
 gem 'pg', '>= 0.18', '< 2.0'
 gem 'puma', '~> 3.7'
 gem 'json'
+gem 'active_model_serializers'
 
 gem 'jbuilder', '~> 2.5'
 
