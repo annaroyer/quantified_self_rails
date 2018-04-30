@@ -79,6 +79,12 @@ describe 'Foods API' do
       expect(new_banana.name).to eq(chocolate_covered[:name])
       expect(new_banana.calories).to eq(chocolate_covered[:calories])
     end
+
+    it 'returns a 404 if food cannot be found' do
+      patch'/api/v1/foods/1', params: {"food":{"name": "chocolate covered banana", "calories": "400"} }
+
+      expect(response.status).to eq(404)
+    end
   end
 
   context 'delete /api/v1/foods/:id' do
