@@ -80,4 +80,17 @@ describe 'Foods API' do
       expect(new_banana.calories).to eq(chocolate_covered[:calories])
     end
   end
+
+  context 'delete /api/v1/foods/:id' do
+    it 'deletes the food with given id and returns a 204 status code' do
+      banana = Food.create!(name: 'Banana', calories: 150)
+
+      expect(Food.count).to eq(1)
+
+      delete "/api/v1/foods/#{banana.id}"
+
+      expect(response.status).to eq(204)
+      expect(Food.count).to eq(0)
+    end
+  end
 end
