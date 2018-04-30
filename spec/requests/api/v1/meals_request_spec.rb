@@ -15,8 +15,13 @@ describe 'Meals API' do
 
       meals = JSON.parse(response.body, symbolize_names: true)
 
-      expect_response(response).to be_success
-      expect(meals).to eq(raw_meals)
+      expect(response).to be_success
+      expect(meals.first[:name]).to eq(Meal.first.name)
+      expect(meals.first[:foods].count).to eq(Meal.first.foods.count)
+      expect(meals.first[:foods]).to include({id: 1, name: "Banana", calories: 150})
+      expect(meals.last[:foods].count).to eq(Meal.last.foods.count)
+      expect(meals.last[:foods]).to include({id: 1, name: "Banana", calories: 150})
+      expect(meals.last[:name]).to eq(Meal.last.name)
     end
   end
 end
