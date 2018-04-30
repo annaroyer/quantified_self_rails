@@ -63,4 +63,21 @@ describe 'Foods API' do
       expect(response.status).to eq(404)
     end
   end
+
+  context 'patch /api/v1/foods/:id' do
+    it 'updates an existing food and returns the food item' do
+      banana = Food.create!(name: 'Banana', calories: 150)
+
+      patch "/api/v1/foods/#{banana.id}", params: {"food":{"name": "chocolate covered banana", "calories": "400"} }
+
+      chocolate_covered = JSON.parse(response.body, symbolize_names: true)
+      new_banana = Food.find(banana.id)
+
+      expect(response).to be_success
+      expect(chocolate_covered[:name]).to eq("chocolate covered banana")
+      expect(chocolate_covered[:calories]).to eq(400)
+      expect(new_banana.name).to eq(chocolate_covered[:name])
+      expect(new_banana.calories).to eq(chocolate_covered[:calories])
+    end
+  end
 end
