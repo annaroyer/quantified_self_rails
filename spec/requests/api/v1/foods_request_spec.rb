@@ -92,5 +92,11 @@ describe 'Foods API' do
       expect(response.status).to eq(204)
       expect(Food.count).to eq(0)
     end
+
+    it 'returns a 404 if food cannot be found' do
+      delete '/api/v1/foods/1'
+
+      expect(response.status).to eq(404)
+    end
   end
 end
