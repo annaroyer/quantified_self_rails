@@ -21,7 +21,7 @@ describe 'Foods API' do
     it 'returns the food object with the specified id' do
       banana = Food.create!(name: 'Banana', calories: 150)
 
-      get '/api/v1/foods/1'
+      get "/api/v1/foods/#{banana.id}"
 
       food = JSON.parse(response.body, symbolize_names: true)
 
