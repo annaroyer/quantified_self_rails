@@ -12,6 +12,8 @@ gem 'puma', '~> 3.7'
 gem 'json'
 gem 'active_model_serializers'
 
+gem 'rack-cors', require: 'rack/cors'
+
 gem 'jbuilder', '~> 2.5'
 
 
