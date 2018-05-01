@@ -98,6 +98,16 @@ describe 'Meals API' do
       expect(response.status).to eq(201)
       expect(message).to eq({ message: "Successfully removed Apple from Lunch" })
     end
+
+    it 'returns a 404 if it can not find the meal or food by given id' do
+      delete '/api/v1/meals/6/foods/6'
+
+      expect(response.status).to eq(404)
+
+      delete '/api/v1/meals/3/foods/8'
+
+      expect(response.status).to eq(404)
+    end
   end
 end
 
