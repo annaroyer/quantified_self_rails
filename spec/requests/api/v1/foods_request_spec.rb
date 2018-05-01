@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe 'Foods API' do
-  context 'get /api/v1/foods' do
+  describe 'get /api/v1/foods' do
     it 'returns all foods currently in the database' do
       create_list(:food, 5)
 
