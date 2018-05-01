@@ -43,7 +43,32 @@ describe 'Meals API' do
       expect(response.status).to eq(404)
     end
   end
+
+  context 'post /api/v1/meals/:meal_id/foods/:id' do
+    it 'adds the food with the given :id to the meal with the :meal_id' do
+      breakfast = Meal.find(1)
+      expect(breakfast.foods.count).to eq(3)
+
+      post '/api/v1/meals/1/foods/10'
+
+      message = JSON.parse(response.body, symbolize_names: true)
+
+      expect(response.status).to eq(201)
+      expect(message).to eq({ message: "Successfully added Cheese to Breakfast" })
+      expect(breakfast.foods.count).to eq(4)
+    end
+  end
 end
+
+# Adds the food with :id to the meal with :meal_id
+#
+# This creates a new record in the MealFoods table to establish the relationship between this food and meal. If the meal/food cannot be found, a 404 will be returned.
+#
+# If successful, this request will return a status code of 201 with the following body:
+#
+# {
+# "message": "Successfully added FOODNAME to MEALNAME"
+# }
 
 
 def raw_meals
