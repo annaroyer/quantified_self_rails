@@ -17,12 +17,13 @@ describe 'Meals API' do
       meals = JSON.parse(response.body, symbolize_names: true)
 
       expect(response).to be_success
-      expect(meals.first[:name]).to eq(Meal.first.name)
+      expect(meals.first[:name]).to eq(raw_meals.first[:name])
+      expect(meals.last[:name]).to eq(raw_meals.last[:name])
+      expect(meals.count).to eq(Meal.count)
       expect(meals.first[:foods].count).to eq(Meal.first.foods.count)
-      expect(meals.first[:foods]).to include({id: 1, name: "Banana", calories: 150})
       expect(meals.last[:foods].count).to eq(Meal.last.foods.count)
+      expect(meals.first[:foods]).to include({id: 1, name: "Banana", calories: 150})
       expect(meals.last[:foods]).to include({id: 1, name: "Banana", calories: 150})
-      expect(meals.last[:name]).to eq(Meal.last.name)
     end
   end
 
@@ -33,9 +34,7 @@ describe 'Meals API' do
       meal = JSON.parse(response.body, symbolize_names: true)
 
       expect(response).to be_success
-      expect(meal[:name]).to eq(Meal.first.name)
-      expect(meal[:foods].count).to eq(Meal.first.foods.count)
-      expect(meal[:foods].first[:name]).to eq(Meal.first.foods.first.name)
+      expect(meal).to eq(raw_meals.first)
     end
   end
 end
@@ -47,84 +46,36 @@ def raw_meals
       id: 1,
       name: "Breakfast",
       foods: [
-        {
-        id: 1,
-        name: "Banana",
-        calories: 150
-        },
-        {
-        id: 6,
-        name: "Yogurt",
-        calories: 550
-        },
-        {
-        id: 12,
-        name: "Apple",
-        calories: 220
-        }
+        { id: 1, name: "Banana",calories: 150 },
+        { id: 6, name: "Yogurt", calories: 550 },
+        { id: 12, name: "Apple", calories: 220 }
       ]
     },
     {
       id: 2,
       name: "Snack",
       foods: [
-        {
-        id: 1,
-        name: "Banana",
-        calories: 150
-        },
-        {
-        id: 9,
-        name: "Gum",
-        calories: 50
-        },
-        {
-        id: 10,
-        name: "Cheese",
-        calories: 400
-        }
+        { id: 1, name: "Banana", calories: 150 },
+        { id: 9, name: "Gum", calories: 50 },
+        { id: 10, name: "Cheese", calories: 400 }
       ]
     },
     {
       id: 3,
       name: "Lunch",
       foods: [
-        {
-        id: 2,
-        name: "Bagel Bites - Four Cheese",
-        calories: 650
-        },
-        {
-        id: 3,
-        name: "Chicken Burrito",
-        calories: 800
-        },
-        {
-        id: 12,
-        name: "Apple",
-        calories: 220
-        }
+        { id: 2, name: "Bagel Bites - Four Cheese", calories: 650 },
+        { id: 3, name: "Chicken Burrito", calories: 800 },
+        { id: 12, name: "Apple", calories: 220 }
       ]
     },
     {
       id: 4,
       name: "Dinner",
       foods: [
-        {
-        id: 1,
-        name: "Banana",
-        calories: 150
-        },
-        {
-        id: 2,
-        name: "Bagel Bites - Four Cheese",
-        calories: 650
-        },
-        {
-        id: 3,
-        name: "Chicken Burrito",
-        calories: 800
-        }
+        { id: 1, name: "Banana", calories: 150 },
+        { id: 2, name: "Bagel Bites - Four Cheese", calories: 650 },
+        { id: 3, name: "Chicken Burrito", calories: 800 }
       ]
     }
 ]
