@@ -87,7 +87,7 @@ describe 'Meals API' do
 
       message = JSON.parse(response.body, symbolize_names: true)
 
-      expect(response.status).to eq(201)
+      expect(response).to be_success
       expect(message).to eq({ message: "Successfully removed Yogurt from Breakfast" })
       expect(Meal.first.foods.count).to eq(2)
 
@@ -95,7 +95,7 @@ describe 'Meals API' do
 
       message = JSON.parse(response.body, symbolize_names: true)
 
-      expect(response.status).to eq(201)
+      expect(response).to be_success
       expect(message).to eq({ message: "Successfully removed Apple from Lunch" })
     end
 
