@@ -19,9 +19,9 @@ describe 'Meals API' do
       expect(response).to be_success
       expect(meals.first[:name]).to eq(raw_meals.first[:name])
       expect(meals.last[:name]).to eq(raw_meals.last[:name])
-      expect(meals.count).to eq(Meal.count)
-      expect(meals.first[:foods].count).to eq(Meal.first.foods.count)
-      expect(meals.last[:foods].count).to eq(Meal.last.foods.count)
+      expect(meals.count).to eq(raw_meals.count)
+      expect(meals.first[:foods].count).to eq(raw_meals.first[:foods].count)
+      expect(meals.last[:foods].count).to eq(raw_meals.last[:foods].count)
       expect(meals.first[:foods]).to include({id: 1, name: "Banana", calories: 150})
       expect(meals.last[:foods]).to include({id: 1, name: "Banana", calories: 150})
     end
@@ -29,12 +29,18 @@ describe 'Meals API' do
 
   context 'get /api/v1/meals/:meal_id/foods' do
     it 'returns all the foods associated with the meal with the given meal_id' do
-      get "/api/v1/meals/1/foods"
+      get '/api/v1/meals/1/foods'
 
       meal = JSON.parse(response.body, symbolize_names: true)
 
       expect(response).to be_success
       expect(meal).to eq(raw_meals.first)
+    end
+
+    it 'returns a 404 if the meal with given id does not exist' do
+      get '/api/v1/meals/5/foods'
+
+      expect(response.status).to eq(404)
     end
   end
 end
@@ -78,5 +84,5 @@ def raw_meals
         { id: 3, name: "Chicken Burrito", calories: 800 }
       ]
     }
-]
+  ]
 end
