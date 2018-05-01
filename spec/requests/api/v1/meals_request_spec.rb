@@ -1,16 +1,17 @@
 require 'rails_helper'
 
 describe 'Meals API' do
+  before(:each) do
+    raw_meals.each do |raw_meal|
+      meal = Meal.create!(name: raw_meal[:name])
+      raw_meal[:foods].each do |raw_food|
+        food = Food.find_or_create_by(raw_food)
+        MealFood.create!(food: food, meal: meal)
+      end
+    end
+  end
   context 'get /api/v1/meals' do
     it 'returns all the meals in the database along with their associated foods' do
-      raw_meals.each do |raw_meal|
-        meal = Meal.create!(name: raw_meal[:name])
-        raw_meal[:foods].each do |raw_food|
-          food = Food.find_or_create_by(raw_food)
-          MealFood.create!(food: food, meal: meal)
-        end
-      end
-
       get '/api/v1/meals'
 
       meals = JSON.parse(response.body, symbolize_names: true)
@@ -22,6 +23,19 @@ describe 'Meals API' do
       expect(meals.last[:foods].count).to eq(Meal.last.foods.count)
       expect(meals.last[:foods]).to include({id: 1, name: "Banana", calories: 150})
       expect(meals.last[:name]).to eq(Meal.last.name)
+    end
+  end
+
+  context 'get /api/v1/meals/:meal_id/foods' do
+    it 'returns all the foods associated with the meal with the given meal_id' do
+      get "/api/v1/meals/1/foods"
+
+      meal = JSON.parse(response.body, symbolize_names: true)
+
+      expect(response).to be_success
+      expect(meal[:name]).to eq(Meal.first.name)
+      expect(meal[:foods].count).to eq(Meal.first.foods.count)
+      expect(meal[:foods].first[:name]).to eq(Meal.first.foods.first.name)
     end
   end
 end
