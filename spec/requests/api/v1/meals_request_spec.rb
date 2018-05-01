@@ -34,7 +34,10 @@ describe 'Meals API' do
       meal = JSON.parse(response.body, symbolize_names: true)
 
       expect(response).to be_success
-      expect(meal).to eq(raw_meals.first)
+      expect(meal[:name]).to eq(raw_meals.first[:name])
+      meal[:foods].each do |food|
+        expect(raw_meals.first[:foods]).to include(food)
+      end
     end
 
     it 'returns a 404 if the meal with given id does not exist' do
@@ -56,6 +59,13 @@ describe 'Meals API' do
       expect(response.status).to eq(201)
       expect(message).to eq({ message: "Successfully added Cheese to Breakfast" })
       expect(breakfast.foods.count).to eq(4)
+
+      post '/api/v1/meals/2/foods/6'
+
+      message = JSON.parse(response.body, symbolize_names: true)
+
+      expect(response).to be_success
+      expect(message).to eq({ message: "Successfully added Yogurt to Snack" })
     end
 
     it 'returns a 404 if the meal or food can not be found' do
@@ -68,17 +78,39 @@ describe 'Meals API' do
       expect(response.status).to eq(404)
     end
   end
+
+  context 'delete /api/v1/meals/:meal_id/foods/:id' do
+    it 'removes the food with :id from the meal with :meal_id' do
+      expect(Meal.first.foods.count).to eq(3)
+
+      delete '/api/v1/meals/1/foods/6'
+
+      message = JSON.parse(response.body, symbolize_names: true)
+
+      expect(response.status).to eq(201)
+      expect(message).to eq({ message: "Successfully removed Yogurt from Breakfast" })
+      expect(Meal.first.foods.count).to eq(2)
+
+      delete '/api/v1/meals/3/foods/12'
+
+      message = JSON.parse(response.body, symbolize_names: true)
+
+      expect(response.status).to eq(201)
+      expect(message).to eq({ message: "Successfully removed Apple from Lunch" })
+    end
+
+    it 'returns a 404 if it can not find the meal or food by given id' do
+      delete '/api/v1/meals/6/foods/6'
+
+      expect(response.status).to eq(404)
+
+      delete '/api/v1/meals/3/foods/8'
+
+      expect(response.status).to eq(404)
+    end
+  end
 end
 
-# Adds the food with :id to the meal with :meal_id
-#
-# This creates a new record in the MealFoods table to establish the relationship between this food and meal. If the meal/food cannot be found, a 404 will be returned.
-#
-# If successful, this request will return a status code of 201 with the following body:
-#
-# {
-# "message": "Successfully added FOODNAME to MEALNAME"
-# }
 
 
 def raw_meals
