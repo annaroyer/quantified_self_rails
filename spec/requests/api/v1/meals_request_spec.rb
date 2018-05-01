@@ -57,6 +57,16 @@ describe 'Meals API' do
       expect(message).to eq({ message: "Successfully added Cheese to Breakfast" })
       expect(breakfast.foods.count).to eq(4)
     end
+
+    it 'returns a 404 if the meal or food can not be found' do
+      post '/api/v1/meals/7/foods/10'
+
+      expect(response.status).to eq(404)
+
+      post '/api/v1/meals/1/foods/15'
+
+      expect(response.status).to eq(404)
+    end
   end
 end
 

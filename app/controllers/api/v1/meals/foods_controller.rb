@@ -10,6 +10,6 @@ class Api::V1::Meals::FoodsController < ApplicationController
   private
 
     def meal_food_params
-      {meal_id: params[:meal_id], food_id: params[:id]}
+      { meal: Meal.find(params[:meal_id]), food: Food.find(params[:id]) }
     end
 end
